@@ -1,24 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Marketplace from "./pages/Marketplace";
+import ProductDetail from "./pages/ProductDetail";
+import Trade from "./pages/Trade";
+import Education from "./pages/Education";
+import Challenges from "./pages/Challenges";
+import Wishlist from "./pages/Wishlist";
+import Cart from "./pages/Cart";
+import Transaction from "./pages/Transaction";
+import Profile from "./pages/Profile";
+import Auth from "./pages/Auth";
+import About from "./pages/About";
+import FAQ from "./pages/FAQ";
+import Contact from "./pages/Contact";
+import Terms from "./pages/Terms";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/trade" element={<Trade />} />
+        <Route path="/education" element={<Education />} />
+        <Route path="/challenges" element={<Challenges />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/transactions" element={<Transaction />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/terms" element={<Terms />} />
+      </Routes>
+      <Footer />
+    </Router>
   );
 }
 
