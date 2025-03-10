@@ -1,137 +1,221 @@
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled, { createGlobalStyle, keyframes } from "styled-components";
+
+// **Global Styles**
+const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap');
+  * {
+    font-family: 'Source Sans Pro', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    margin-top: 5px;
+  }
+`;
+
+// **Theme Colors**
+const primaryColor = "#000000";
+const secondaryColor = "#FFFFFF";
+const borderColor = "#CCCCCC";
+const backgroundColor = "#F8F8F8";
+const buttonBackground = "#000000";
+const buttonHover = "#333333";
+
+// **Animations**
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
+const Toast = styled.div`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: ${primaryColor};
+  color: ${secondaryColor};
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  display: ${({ show }) => (show ? "block" : "none")};
+  opacity: 0.9;
+  animation: ${fadeIn} 0.5s ease-in-out;
+`;
 
 const ChallengesContainer = styled.div`
-  padding: 9rem;
-  background: white;
-  color: black;
+  padding: 5rem 2rem;
+  background: ${backgroundColor};
+  color: ${primaryColor};
   text-align: center;
+  min-height: 100vh;
+  animation: ${fadeIn} 0.8s ease-in-out;
 `;
 
 const HeroSection = styled.div`
   width: 100%;
-  height: 450px;
-  background: url('https://via.placeholder.com/1500x450') center/cover no-repeat;
+  height: 400px;
+  background: url('/assets/chal.jpg') center/cover no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
-  font-size: 4rem;
-  font-weight: bold;
-  position: relative;
-  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8);
-  letter-spacing: 2px;
-`;
-
-const HeroOverlay = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 15px;
 `;
 
 const HeroText = styled.h1`
-  position: relative;
-  z-index: 2;
+  color: ${secondaryColor};
+  font-size: 3.5rem;
+  font-weight: 700;
   text-transform: uppercase;
 `;
 
-const SectionTitle = styled.h2`
-  font-size: 2.8rem;
-  margin-top: 3rem;
-  text-align: center;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+const InfoText = styled.p`
+  font-size: 1.3rem;
+  margin-top: 1rem;
+  color: ${primaryColor};
+  font-weight: 500;
 `;
 
-const ChallengesList = styled.div`
+const ChallengeForm = styled.form`
+  background: ${secondaryColor};
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  margin-top: 1.5rem;
+  text-align: left;
+  border: 1px solid ${borderColor};
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2.5rem;
-  margin-top: 3rem;
+  gap: 1rem;
+  position: relative;
 `;
 
-const ChallengeCard = styled.div`
-  width: 85%;
-  max-width: 900px;
-  padding: 2rem;
-  background: #f8f8f8;
-  border: 3px solid black;
-  border-radius: 12px;
-  text-align: left;
-  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: scale(1.03);
-    box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
-  }
+const Badge = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: ${primaryColor};
+  color: ${secondaryColor};
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
 `;
 
-const ChallengeTitle = styled.h3`
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #222;
-  margin-bottom: 0.5rem;
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 `;
 
-const ChallengeDescription = styled.p`
-  font-size: 1.2rem;
-  line-height: 1.5;
-  color: #555;
+const Label = styled.label`
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: ${primaryColor};
 `;
 
-const ParticipateButton = styled.button`
-  margin-top: 1rem;
-  padding: 0.8rem 1.5rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  background: black;
-  color: white;
+const Input = styled.input`
+  width: 100%;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 2px solid ${borderColor};
+  font-size: 1rem;
+  background: ${secondaryColor};
+  color: ${primaryColor};
+  ${({ disabled }) => disabled && "background: #E0E0E0; cursor: not-allowed;"}
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 2px solid ${borderColor};
+  font-size: 1rem;
+  background: ${secondaryColor};
+  color: ${primaryColor};
+  resize: vertical;
+  ${({ disabled }) => disabled && "background: #E0E0E0; cursor: not-allowed;"}
+`;
+
+const SubmitButton = styled.button`
+  padding: 1rem;
+  font-size: 1.1rem;
+  width: 100%;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
+  border-radius: 12px;
+  background: ${({ disabled }) => (disabled ? "#888888" : buttonBackground)};
+  color: ${secondaryColor};
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
 
   &:hover {
-    background: #444;
+    background: ${({ disabled }) => (disabled ? "#888888" : buttonHover)};
+    transform: ${({ disabled }) => (disabled ? "none" : "scale(1.05)")};
   }
 `;
+
+// **Challenge Data**
+const challenges = [
+  { id: 1, title: "Upcycling Challenge", description: "Use old clothes and turn them into something new!", reward: "$50 Voucher", discount: "20% Off" },
+  { id: 2, title: "Color Challenge", description: "Wear only two colors of clothing for a whole day.", reward: "$30 Voucher", discount: "15% Off" },
+  { id: 3, title: "One Day No Shopping", description: "Spend a day without buying new clothes!", reward: "$20 Voucher", discount: "10% Off" },
+];
 
 const Challenges = () => {
-  const challenges = [
-    {
-      title: "Upcycling Challenge",
-      description: "Buat pakaian baru dari pakaian bekas dan tunjukkan kreativitasmu!",
-    },
-    {
-      title: "Minimalist Wardrobe",
-      description: "Hanya gunakan 7 item pakaian selama seminggu. Bisa gak?",
-    },
-    {
-      title: "Swap Challenge",
-      description: "Tukar pakaian dengan teman atau komunitas untuk mengurangi limbah fashion.",
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [completedChallenges, setCompletedChallenges] = useState({});
+
+  const handleSubmit = (id, e) => {
+    e.preventDefault();
+
+    // Cek apakah challenge sudah selesai
+    if (completedChallenges[id]) return;
+
+    const challenge = challenges.find(c => c.id === id);
+    if (challenge) {
+      setToastMessage(`🎉 Challenge Submitted! You've earned ${challenge.discount} off!`);
+      setShowToast(true);
+      setCompletedChallenges(prev => ({ ...prev, [id]: true }));
     }
-  ];
+
+    setTimeout(() => setShowToast(false), 3000);
+  };
 
   return (
-    <ChallengesContainer>
-      <HeroSection>
-        <HeroOverlay />
-        <HeroText>Join the Fashion Challenges</HeroText>
-      </HeroSection>
-      <SectionTitle>Weekly Fashion Challenges</SectionTitle>
-      <ChallengesList>
-        {challenges.map((challenge, index) => (
-          <ChallengeCard key={index}>
-            <ChallengeTitle>{challenge.title}</ChallengeTitle>
-            <ChallengeDescription>{challenge.description}</ChallengeDescription>
-            <ParticipateButton>Join Challenge</ParticipateButton>
-          </ChallengeCard>
+    <>
+      <GlobalStyle />
+      <ChallengesContainer>
+        <HeroSection>
+          <HeroText>Join the Fashion Challenges</HeroText>
+        </HeroSection>
+        <InfoText>Participate in challenges and earn rewards & special discounts!</InfoText>
+
+        {challenges.map((challenge) => (
+          <ChallengeForm key={challenge.id} onSubmit={(e) => handleSubmit(challenge.id, e)}>
+            <Badge>{challenge.reward} | {challenge.discount}</Badge>
+            <h3>{challenge.title}</h3>
+            <p>{challenge.description}</p>
+            <FormGroup>
+              <Label>Upload Image:</Label>
+              <Input type="file" name="image" accept="image/*" disabled={completedChallenges[challenge.id]} />
+            </FormGroup>
+            <FormGroup>
+              <Label>Your Experience:</Label>
+              <TextArea name="experience" placeholder="Describe your experience..." disabled={completedChallenges[challenge.id]} />
+            </FormGroup>
+            <SubmitButton type="submit" disabled={completedChallenges[challenge.id]}>
+              {completedChallenges[challenge.id] ? "Done" : "Submit Challenge"}
+            </SubmitButton>
+          </ChallengeForm>
         ))}
-      </ChallengesList>
-    </ChallengesContainer>
+      </ChallengesContainer>
+
+      <Toast show={showToast}>{toastMessage}</Toast>
+    </>
   );
 };
 

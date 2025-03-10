@@ -1,101 +1,312 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
-const HomeContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: white;
-  padding: 4rem;
+// Animasi untuk fade-in
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 `;
 
-const ContentWrapper = styled.div`
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
+  padding: 6rem 4rem 4rem;
+  width: 100%;
+`;
+
+const Section = styled.div`
   display: flex;
   align-items: center;
-  gap: 4rem;
+  justify-content: center;
   max-width: 1200px;
   width: 100%;
+  margin-bottom: 4rem;
+  gap: 3rem;
+  animation: ${fadeIn} 1s ease-in-out;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
 `;
 
 const ImageContainer = styled.div`
   flex: 1;
-  border-radius: 20px;
+  border-radius: 10px;
   overflow: hidden;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+  max-width: 50%;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 768px) {
+    max-width: 80%;
+  }
 `;
 
 const Image = styled.img`
   width: 100%;
   height: auto;
-  border-radius: 20px;
+  border-radius: 10px;
+  display: block;
 `;
 
-const QuoteContainer = styled.div`
+const TextContainer = styled.div`
   flex: 1;
-  text-align: left;
-  font-size: 2rem;
-  font-weight: bold;
-  color: black;
-  line-height: 1.8;
   font-family: 'Playfair Display', serif;
   max-width: 500px;
+
+  @media (max-width: 768px) {
+    max-width: 90%;
+  }
 `;
 
 const QuoteText = styled.p`
+  font-size: 1.8rem;
   font-style: italic;
-  quotes: "\201C" "\201D" "\2018" "\2019";
+  line-height: 1.5;
   position: relative;
-  padding-left: 20px;
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 1rem;
+  color: #333;
 
   &::before {
-    content: open-quote;
+    content: '“';
     font-size: 3rem;
     position: absolute;
-    left: -15px;
-    top: -15px;
-    color: black;
+    left: -25px;
+    top: -10px;
+    color: #1a1a1a;
   }
 
   &::after {
-    content: close-quote;
-    align-self: flex-end;
+    content: '”';
     font-size: 3rem;
   }
 `;
 
 const Author = styled.p`
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: normal;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   text-align: left;
+  color: #666;
+`;
+
+const InfoText = styled.p`
+  font-size: 1.2rem;
+  line-height: 1.8;
   font-family: 'Playfair Display', serif;
+  color: #444;
+`;
+
+const Source = styled.p`
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  color: #1a1a1a;
+`;
+
+const VideoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 4rem;
+  animation: ${fadeIn} 1s ease-in-out;
+`;
+
+const VideoTitle = styled.h2`
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+`;
+
+const Video = styled.iframe`
+  width: 100%;
+  height: 450px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+
+  @media (max-width: 768px) {
+    height: 300px;
+  }
+`;
+
+const CTAButton = styled.button`
+  padding: 1rem 2rem;
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  margin-top: 2rem;
+
+  &:hover {
+    background: #333;
+  }
+`;
+
+const StatsContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 4rem;
+  animation: ${fadeIn} 1s ease-in-out;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+`;
+
+const StatItem = styled.div`
+  text-align: center;
+`;
+
+const StatNumber = styled.h3`
+  font-size: 2.5rem;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+`;
+
+const StatLabel = styled.p`
+  font-size: 1rem;
+  color: #666;
+`;
+
+const TestimonialSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 4rem;
+  animation: ${fadeIn} 1s ease-in-out;
+`;
+
+const TestimonialTitle = styled.h2`
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #1a1a1a;
+`;
+
+const TestimonialCard = styled.div`
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+`;
+
+const TestimonialText = styled.p`
+  font-size: 1.2rem;
+  font-style: italic;
+  color: #444;
+  margin-bottom: 1rem;
+`;
+
+const TestimonialAuthor = styled.p`
+  font-size: 1rem;
+  color: #666;
 `;
 
 const Home = () => {
+  const navigate = useNavigate(); // Gunakan useNavigate untuk navigasi
+
+  const handleExploreClick = () => {
+    navigate('/marketplace'); // Arahkan ke halaman marketplace
+  };
+
   return (
-    <HomeContainer>
-      <ContentWrapper>
+    <PageContainer>
+      {/* Section 1: Quote */}
+      <Section>
         <ImageContainer>
-          <Image src="/path-to-your-image.jpg" alt="Fashion Model" />
+          <Image src="/assets/home1.png" alt="Fashion Model" />
         </ImageContainer>
-        <QuoteContainer>
+        <TextContainer>
           <QuoteText>
-            Don't be into <br/>
-            trends. Don't <br/>
-            make fashion  <br/>
-            own you, but you <br/>
-            decided what you <br/>
-            express by the <br/>
-            way you dress <br/>
-            and the way you <br/>
-            live.,,
+            Don't be into trends. Don't make fashion own you, but you decide
+            what you are, what you express by the way you dress and the way you
+            live.
           </QuoteText>
-          <Author>Gianni Versace</Author>
-        </QuoteContainer>
-      </ContentWrapper>
-    </HomeContainer>
+          <Author>— Gianni Versace</Author>
+          <CTAButton onClick={handleExploreClick}>Explore Our Collection</CTAButton>
+        </TextContainer>
+      </Section>
+
+      {/* Section 2: Fast Fashion Impact */}
+      <Section>
+        <ImageContainer>
+          <Image src="/assets/home2.png" alt="Fast Fashion Impact" />
+        </ImageContainer>
+        <TextContainer>
+          <InfoText>
+            The impact of fast fashion on the environment is a layered issue.
+            For starters, a March 2023 report by the United Nations Environment
+            Programme (UNEP) said that fashion was responsible for up to 10% of
+            annual global carbon emissions.
+          </InfoText>
+          <Source>— Vogue</Source>
+        </TextContainer>
+      </Section>
+
+      {/* Section 3: Video */}
+      <VideoContainer>
+        <VideoTitle>Fabric Waste</VideoTitle>
+        <Video src="https://www.youtube.com/embed/7i0QMnz4ExY" allowFullScreen />
+      </VideoContainer>
+
+      {/* Section 4: Statistics */}
+      <StatsContainer>
+        <StatItem>
+          <StatNumber>10%</StatNumber>
+          <StatLabel>of global carbon emissions</StatLabel>
+        </StatItem>
+        <StatItem>
+          <StatNumber>92M</StatNumber>
+          <StatLabel>tons of textile waste annually</StatLabel>
+        </StatItem>
+        <StatItem>
+          <StatNumber>20%</StatNumber>
+          <StatLabel>of global wastewater</StatLabel>
+        </StatItem>
+      </StatsContainer>
+
+      {/* Section 5: Testimonial */}
+      <TestimonialSection>
+        <TestimonialTitle>What Our Customers Say</TestimonialTitle>
+        <TestimonialCard>
+          <TestimonialText>
+            "I love how Rayandja promotes sustainable fashion. Their collection
+            is not only stylish but also eco-friendly!"
+          </TestimonialText>
+          <TestimonialAuthor>— Sarah, Eco-conscious Shopper</TestimonialAuthor>
+        </TestimonialCard>
+      </TestimonialSection>
+    </PageContainer>
   );
 };
 

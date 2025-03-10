@@ -9,6 +9,9 @@ import Wishlist from "./pages/Wishlist";
 import Cart from "./pages/Cart";
 import Transaction from "./pages/Transaction";
 import Profile from "./pages/Profile";
+import ProfileLayout from "./pages/ProfileLayout";
+import Address from "./pages/Address";
+import Login from "./pages/Login";
 import Auth from "./pages/Auth";
 import About from "./pages/About";
 import FAQ from "./pages/FAQ";
@@ -32,6 +35,9 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/transactions" element={<Transaction />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profilelayout" element={<ProfileLayout />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/address" element={<Address />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/about" element={<About />} />
         <Route path="/faq" element={<FAQ />} />
